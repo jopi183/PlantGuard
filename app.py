@@ -5,10 +5,11 @@ from PIL import Image
 import cv2
 import io
 import base64
+import os
 
 # Konfigurasi halaman
 st.set_page_config(
-    page_title="🌱 PlantGuard",
+    page_title="PlantGuard",
     page_icon="🌱",
     layout="wide",
     initial_sidebar_state="expanded"
