@@ -5,9 +5,10 @@ from PIL import Image
 import cv2
 import io
 import base64
+
 # Konfigurasi halaman
 st.set_page_config(
-    page_title="PlantGuard",
+    page_title="🌱 PlantGuard",
     page_icon="🌱",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -87,17 +88,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-import os
-
+# Fungsi untuk memuat model
 @st.cache_resource
 def load_model():
     try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))  # lokasi file app.py
-        model_path = os.path.join(base_dir, 'mobilenetv2_plantvillage2.h5')
-        model = tf.keras.models.load_model(model_path)
+        model = tf.keras.models.load_model('mobilenetv2_plantvillage.h5')
         return model
-    except Exception as e:
-        st.error(f"⚠️ Model tidak ditemukan! Detail: {str(e)}")
+    except:
+        st.error("⚠️ Model tidak ditemukan! Pastikan file 'mobilenetv2_plantvillage.h5' ada di direktori yang sama.")
         return None
 
 # Fungsi untuk memuat label
@@ -130,22 +128,7 @@ def preprocess_image(image):
     return image_array
 
 # Fungsi untuk prediksi
-import tensorflow as tf
-import numpy as np
-
-# Load model lama
-old_model = tf.keras.models.load_model("mobilenetv2_plantvillage.h5")
-
-# Gabungkan output-nya
-merged_output = tf.keras.layers.Concatenate()(old_model.outputs)
-
-# Layer dense baru
-final_output = tf.keras.layers.Dense(38, activation="softmax")(merged_output)  # 38 = jumlah kelas
-
-# Bungkus model baru
-model = tf.keras.models.Model(inputs=old_model.inputs, outputs=final_output)
-
-def predict_disease(image):
+def predict_disease(model, image):
     processed_image = preprocess_image(image)
     prediction = model.predict(processed_image)
     predicted_class = np.argmax(prediction[0])
