@@ -130,11 +130,24 @@ def preprocess_image(image):
     return image_array
 
 # Fungsi untuk prediksi
-def predict_disease(model, image):
+import tensorflow as tf
+import numpy as np
+
+# Load model lama
+old_model = tf.keras.models.load_model("mobilenetv2_plantvillage.h5")
+
+# Gabungkan output-nya
+merged_output = tf.keras.layers.Concatenate()(old_model.outputs)
+
+# Layer dense baru
+final_output = tf.keras.layers.Dense(38, activation="softmax")(merged_output)  # 38 = jumlah kelas
+
+# Bungkus model baru
+model = tf.keras.models.Model(inputs=old_model.inputs, outputs=final_output)
+
+def predict_disease(image):
     processed_image = preprocess_image(image)
-    
-    prediction = model.predict([processed_image, processed_image])
-    
+    prediction = model.predict(processed_image)
     predicted_class = np.argmax(prediction[0])
     confidence = float(prediction[0][predicted_class])
     return predicted_class, confidence
