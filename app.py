@@ -132,7 +132,9 @@ def preprocess_image(image):
 # Fungsi untuk prediksi
 def predict_disease(model, image):
     processed_image = preprocess_image(image)
-    prediction = model.predict(processed_image)
+    
+    prediction = model.predict([processed_image, processed_image])
+    
     predicted_class = np.argmax(prediction[0])
     confidence = float(prediction[0][predicted_class])
     return predicted_class, confidence
