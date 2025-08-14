@@ -5,7 +5,6 @@ from PIL import Image
 import cv2
 import io
 import base64
-import os
 # Konfigurasi halaman
 st.set_page_config(
     page_title="PlantGuard",
@@ -88,10 +87,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+import os
+
 @st.cache_resource
 def load_model():
     try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # lokasi file app.py
         model_path = os.path.join(base_dir, 'mobilenetv2_plantvillage.h5')
         model = tf.keras.models.load_model(model_path)
         return model
