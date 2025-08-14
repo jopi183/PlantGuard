@@ -109,9 +109,7 @@ def load_model():
     except Exception as e:
         st.error(f"⚠️ Model gagal dimuat: {str(e)}")
         return None
-del tidak ditemukan! Pastikan file 'mobilenetv2_plantvillage.h5' ada di direktori yang sama.")
-        return None
-
+        
 # Fungsi untuk memuat label
 @st.cache_data
 def load_labels():
