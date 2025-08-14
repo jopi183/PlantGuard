@@ -88,14 +88,28 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Fungsi untuk memuat model
+MODEL_FILE = "mobilenetv2_plantvillage.h5"
+MODEL_URL = "https://drive.google.com/file/d/1WcYTyVSdMIiebFvQif4RjjdnJaM_hqd3/view?usp=sharing"  # ganti dengan link model
+
 @st.cache_resource
 def load_model():
     try:
-        model = tf.keras.models.load_model('mobilenetv2_plantvillage.h5')
+        # Cari model berdasarkan lokasi file .py
+        model_path = os.path.join(os.path.dirname(__file__), MODEL_FILE)
+
+        # Kalau file belum ada, coba download
+        if not os.path.exists(model_path):
+            st.warning("📥 Mengunduh model, harap tunggu...")
+            gdown.download(MODEL_URL, model_path, quiet=False)
+
+        # Load model
+        model = tf.keras.models.load_model(model_path)
         return model
-    except:
-        st.error("⚠️ Model tidak ditemukan! Pastikan file 'mobilenetv2_plantvillage.h5' ada di direktori yang sama.")
+
+    except Exception as e:
+        st.error(f"⚠️ Model gagal dimuat: {str(e)}")
+        return None
+del tidak ditemukan! Pastikan file 'mobilenetv2_plantvillage.h5' ada di direktori yang sama.")
         return None
 
 # Fungsi untuk memuat label
