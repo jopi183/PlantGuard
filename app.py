@@ -8,7 +8,7 @@ import base64
 
 # Konfigurasi halaman
 st.set_page_config(
-    page_title="🌱 PlantGuard",
+    page_title="PlantGuard",
     page_icon="🌱",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -88,14 +88,15 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Fungsi untuk memuat model
 @st.cache_resource
 def load_model():
     try:
-        model = tf.keras.models.load_model('mobilenetv2_plantvillage.h5')
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(base_dir, 'mobilenetv2_plantvillage.h5')
+        model = tf.keras.models.load_model(model_path)
         return model
-    except:
-        st.error("⚠️ Model tidak ditemukan! Pastikan file 'mobilenetv2_plantvillage.h5' ada di direktori yang sama.")
+    except Exception as e:
+        st.error(f"⚠️ Model tidak ditemukan! Detail: {str(e)}")
         return None
 
 # Fungsi untuk memuat label
