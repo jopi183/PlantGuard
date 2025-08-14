@@ -93,7 +93,7 @@ import os
 def load_model():
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))  # lokasi file app.py
-        model_path = os.path.join(base_dir, 'mobilenetv2_plantvillage.h5')
+        model_path = os.path.join(base_dir, 'mobilenetv2_plantvillage2.h5')
         model = tf.keras.models.load_model(model_path)
         return model
     except Exception as e:
