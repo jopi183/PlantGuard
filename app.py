@@ -135,6 +135,9 @@ def load_labels():
 
 # Fungsi untuk preprocessing gambar
 def preprocess_image(image):
+    # Konversi ke RGB dulu
+    if image.mode != "RGB":
+        image = image.convert("RGB")
     image = image.resize((224, 224))
     image_array = np.array(image) / 255.0
     image_array = np.expand_dims(image_array, axis=0)
